@@ -1,0 +1,153 @@
+<!-- 설정 화면: 네 묶음을 접고 펼친다. 줄마다 왼쪽은 설정 이름, 오른쪽은 설정 값. 글자는 components/i18n.js 의 키로 바뀐다. -->
+<details class="setting-group" open>
+  <summary class="setting-group-head">
+    <span data-i18n="setting.groupUser">사용자</span>
+    <span class="material-symbols-outlined setting-group-chev" aria-hidden="true">expand_more</span>
+  </summary>
+  <div class="setting-row">
+    <span class="setting-label" data-i18n="setting.account">계정</span>
+    <span class="setting-value setting-account">
+      <strong>{{userName}}</strong>
+      <small>{{userEmail}}</small>
+    </span>
+  </div>
+  <div class="setting-row">
+    <label class="setting-label" for="user-age" data-i18n="setting.age">연령대</label>
+    <select id="user-age" class="setting-select">
+      <option value="미상" data-i18n="setting.unknown">선택 안 함</option>
+      <option value="10대" data-age="10">10대</option>
+      <option value="20대" data-age="20">20대</option>
+      <option value="30대" data-age="30">30대</option>
+      <option value="40대" data-age="40">40대</option>
+      <option value="50대" data-age="50">50대</option>
+      <option value="60대" data-age="60">60대</option>
+      <option value="70대" data-age="70">70대</option>
+    </select>
+  </div>
+  <div class="setting-row">
+    <label class="setting-label" for="user-gender" data-i18n="setting.gender">성별</label>
+    <select id="user-gender" class="setting-select">
+      <option value="미상" data-i18n="setting.unknown">선택 안 함</option>
+      <option value="남" data-i18n="setting.male">남</option>
+      <option value="여" data-i18n="setting.female">여</option>
+    </select>
+  </div>
+</details>
+
+<details class="setting-group" open>
+  <summary class="setting-group-head">
+    <span data-i18n="setting.groupPersonal">개인화 설정</span>
+    <span class="material-symbols-outlined setting-group-chev" aria-hidden="true">expand_more</span>
+  </summary>
+  <div class="setting-row">
+    <label class="setting-label" for="time-slider" data-i18n="setting.learningTime">1회당 학습 시간</label>
+    <span class="setting-value setting-range">
+      <input type="range" id="time-slider" min="0" max="5" step="1" value="{{timeIdx}}"
+        oninput="updateTimeFromSlider(this.value)">
+      <span class="setting-range-val"><span id="time-val-display">{{learningTime}}</span><span data-i18n="setting.seconds">초</span></span>
+    </span>
+  </div>
+  <div class="setting-row">
+    <label class="setting-label" for="pool-size" data-i18n="setting.poolSize">1회당 문제 수</label>
+    <input type="number" id="pool-size" class="setting-number" min="1" max="100" value="{{MAX_POOL_SIZE}}">
+  </div>
+  <div class="setting-row setting-row-wrap">
+    <span class="setting-label" data-i18n="setting.quizTypes">퀴즈 범위</span>
+    <div class="quiz-type-list">{{quizTypeOptions}}</div>
+  </div>
+  <p class="setting-hint">글자와 소리를 함께 켜면 단어를 보여 주면서 읽어 줍니다.</p>
+  <div class="setting-row setting-row-wrap">
+    <span class="setting-label">출제 방향</span>
+    <div class="quiz-type-list">{{quizDirectionOptions}}</div>
+  </div>
+  <p class="setting-hint">둘 다 켜면 섞어서 냅니다. 한→외는 한국어 뜻을 보고 외국어 단어를 고릅니다.</p>
+  <div class="setting-row">
+    <label class="setting-label" for="ko-foreign-sound">한→외 문제 소리</label>
+    <input type="checkbox" id="ko-foreign-sound" class="setting-check" {{#if koForeignSound}}checked{{/if}}>
+  </div>
+  <div class="setting-row">
+    <label class="setting-label" for="ko-foreign-sound-ask">시작할 때 소리 물어보기</label>
+    <input type="checkbox" id="ko-foreign-sound-ask" class="setting-check" {{#if koForeignSoundAsk}}checked{{/if}}>
+  </div>
+  <p class="setting-hint">「한→외 문제 소리」를 켜면 소리 듣기가 켜져 있을 때 한→외 문제에서도 정답 단어의 소리를 들려줍니다.</p>
+  <div class="setting-row">
+    <label class="setting-label" for="speech-slider" data-i18n="setting.speechRate">음성 속도</label>
+    <span class="setting-value setting-range">
+      <input type="range" id="speech-slider" min="0" max="5" step="1" value="{{speechIdx}}"
+        oninput="updateSpeechFromSlider(this.value)">
+      <span class="setting-range-val"><span id="speech-val-display">{{speechRate}}</span>×</span>
+      <button type="button" class="setting-toggle-btn" onclick="playSoundTest()" aria-label="음성 테스트" title="음성 테스트">
+        <span class="material-symbols-outlined" style="font-size:1.1rem">volume_up</span>
+      </button>
+    </span>
+  </div>
+  <div class="setting-row">
+    <label class="setting-label" for="furigana" data-i18n="setting.furigana">후리가나(일본어 읽기)</label>
+    <input type="checkbox" id="furigana" class="setting-check" {{#if furigana}}checked{{/if}}>
+  </div>
+  <div class="setting-row">
+    <label class="setting-label" for="auto-progress" data-i18n="setting.autoProgress">자동 진도</label>
+    <input type="checkbox" id="auto-progress" class="setting-check" {{#if autoProgress}}checked{{/if}}>
+  </div>
+</details>
+
+<details class="setting-group" open>
+  <summary class="setting-group-head">
+    <span data-i18n="setting.groupSystem">시스템</span>
+    <span class="material-symbols-outlined setting-group-chev" aria-hidden="true">expand_more</span>
+  </summary>
+  <div class="setting-row">
+    <label class="setting-label" for="ui-language" data-i18n="setting.language">언어</label>
+    <select id="ui-language" class="setting-select">{{languageOptions}}</select>
+  </div>
+  <div class="setting-row">
+    <span class="setting-label" data-i18n="setting.accent">테마색</span>
+    <div class="accent-swatches" role="radiogroup" aria-label="테마색">
+      <button type="button" class="accent-swatch" role="radio" data-accent="pink" style="background:#ec4899" title="분홍" aria-label="분홍"></button>
+      <button type="button" class="accent-swatch" role="radio" data-accent="blue" style="background:#2563eb" title="파랑" aria-label="파랑"></button>
+      <button type="button" class="accent-swatch" role="radio" data-accent="green" style="background:#16a34a" title="초록" aria-label="초록"></button>
+      <button type="button" class="accent-swatch" role="radio" data-accent="purple" style="background:#7c3aed" title="보라" aria-label="보라"></button>
+      <button type="button" class="accent-swatch" role="radio" data-accent="orange" style="background:#ea580c" title="주황" aria-label="주황"></button>
+    </div>
+  </div>
+  <div class="setting-row">
+    <label class="setting-label" for="weather-theme" data-i18n="setting.weatherTheme">날씨 반영</label>
+    <input type="checkbox" id="weather-theme" class="setting-check" {{#if weatherTheme}}checked{{/if}}>
+  </div>
+  <p class="setting-hint" data-i18n="setting.weatherThemeHint">처음 화면의 계절 무대에 접속 위치(IP)로 짐작한 지금 날씨를 겹칩니다. 끄면 위치를 묻지 않습니다.</p>
+  <div class="setting-row setting-notify-row">
+    <span class="setting-label" data-i18n="setting.reminder">복습 알림</span>
+    <div class="setting-notify-ctrl">
+      <span id="notify-status" class="setting-notify-status"></span>
+      <button id="btn-notify-enable" type="button" class="setting-notify-btn" hidden>권한 허용</button>
+      <input type="checkbox" id="review-reminder" class="setting-check" aria-label="복습 알림 받기">
+    </div>
+  </div>
+  <p id="notify-last" class="setting-notify-last" hidden></p>
+  <div class="setting-row">
+    <span class="setting-label" data-i18n="setting.errorFeedback">오답 표시 방법</span>
+    <div class="setting-value setting-btn-pair">
+      <button id="btn-error-show" type="button" class="setting-toggle-btn">표시</button>
+      <button id="btn-error-audio" type="button" class="setting-toggle-btn">+ 음성</button>
+    </div>
+  </div>
+  <div class="setting-row">
+    <label class="setting-label" for="spectator-interval" data-i18n="setting.spectatorInterval">관전 모드 주기</label>
+    <select id="spectator-interval" class="setting-select">
+      <option value="1.5">1.5s</option>
+      <option value="2">2s</option>
+      <option value="2.5">2.5s</option>
+      <option value="3">3s</option>
+      <option value="4">4s</option>
+      <option value="5">5s</option>
+    </select>
+  </div>
+</details>
+
+<details class="setting-group">
+  <summary class="setting-group-head">
+    <span data-i18n="setting.groupKeys">단축키</span>
+    <span class="material-symbols-outlined setting-group-chev" aria-hidden="true">expand_more</span>
+  </summary>
+  <div class="setting-keys">{{keybindingsConfig}}</div>
+</details>
